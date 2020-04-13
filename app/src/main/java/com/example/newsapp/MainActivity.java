@@ -21,8 +21,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<NewsItem>> {
 
     //URL to query the Guardian dataset for marvel information
-    private static final String GUARDIAN_API_URL =
-            "https://content.guardianapis.com/search?q=marvel&page=1&show-fields=thumbnail&show-references=author&api-key=b9008914-e1ce-43b2-8dec-43804573e66e";
+    private static final String GUARDIAN_API_URL = "https://content.guardianapis.com/search";
 
     //Constant value for the news loader ID
     private static final int NEWS_LOADER_ID = 1;
@@ -58,8 +57,10 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 if(news.getUrl() != null) {
                     //open web browser with the giver url
                     Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(news.getUrl()));
-                    startActivity(i);
+                    if (i.resolveActivity(getPackageManager()) != null) {
+                        i.setData(Uri.parse(news.getUrl()));
+                        startActivity(i);
+                    }
                 }
             }
         });
@@ -84,8 +85,18 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public Loader<List<NewsItem>> onCreateLoader(int i, Bundle bundle) {
+        //parse the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(GUARDIAN_API_URL);
+        //buildUpon prepares the baseUri that we just parsed so we can add query parameters to itclean
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        //append query parameter and its value
+        uriBuilder.appendQueryParameter("q", "marvel");
+        uriBuilder.appendQueryParameter("page", "1");
+        uriBuilder.appendQueryParameter("show-fields", "thumbnail");
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        uriBuilder.appendQueryParameter("api-key", "b9008914-e1ce-43b2-8dec-43804573e66e");
         //create a new loader for the given URL
-        return new NewsLoader(this, GUARDIAN_API_URL);
+        return new NewsLoader(this, uriBuilder.toString());
     }
 
     @Override

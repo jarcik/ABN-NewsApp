@@ -80,7 +80,7 @@ public class NewsItem {
         //formatter for the parsing the date from the string
         SimpleDateFormat parseF =new SimpleDateFormat("yyyy-MM-dd");
         //formatter for formatting the string to display in the view
-        SimpleDateFormat formatF =new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat formatF =new SimpleDateFormat("dd.MM.yy");
         try {
             //first substring for the requested format, then parse from string and then format to display
             return formatF.format(parseF.parse(date.substring(0, 10)));

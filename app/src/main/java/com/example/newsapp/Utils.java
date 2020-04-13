@@ -93,13 +93,19 @@ public class Utils {
                     //url
                     String webUrl = c.getString("webUrl");
                     //thumbnail url
-                    String thumbnailUrl = c.getJSONObject("fields").getString("thumbnail");
-                    //author - do not have to be there
-                    String author = null;
-                    if(c.has("show-references")) {
-                        JSONObject references = c.getJSONObject("show-references");
-                        if(references != null && references.has("author")) {
-                            author = references.getString("author");
+                    String thumbnailUrl = null;
+                    if(c.has("fields") && c.getJSONObject("fields").has("thumbnail")) {
+                        thumbnailUrl = c.getJSONObject("fields").getString("thumbnail");
+                    }
+                    //author
+                    String author = "";
+                    if(c.has("tags")) {
+                        JSONArray tags = c.getJSONArray("tags");
+                        if(tags != null && tags.length() > 0) {
+                            for (int j = 0; j < tags.length(); j++) {
+                                if(j > 0) author += ", ";
+                                author += tags.getJSONObject(j).getString("webTitle");
+                            }
                         }
                     }
                     //adding a news article to our news list

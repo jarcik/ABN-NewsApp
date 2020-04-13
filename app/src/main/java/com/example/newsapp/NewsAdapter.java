@@ -19,10 +19,8 @@ public class NewsAdapter extends ArrayAdapter<NewsItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //check if an existing view is being reused, otherwise inflate the view
-        View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.list_item, parent, false);
         }
 
@@ -30,23 +28,23 @@ public class NewsAdapter extends ArrayAdapter<NewsItem> {
         NewsItem currentNewsItem = getItem(position);
 
         //title of the news
-        TextView titleTV = listItemView.findViewById(R.id.title);
+        TextView titleTV = convertView.findViewById(R.id.title);
         titleTV.setText(currentNewsItem.getTitle());
 
         //date
-        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
+        TextView dateView = (TextView) convertView.findViewById(R.id.date);
         dateView.setText(currentNewsItem.getDateFormatted());
 
         //section - FILM mostly
-        TextView sectionTV = (TextView) listItemView.findViewById(R.id.section);
+        TextView sectionTV = (TextView) convertView.findViewById(R.id.section);
         sectionTV.setText(currentNewsItem.getSection());
 
         //author of the article
-        TextView authorTV = (TextView) listItemView.findViewById(R.id.author);
+        TextView authorTV = (TextView) convertView.findViewById(R.id.author);
         authorTV.setText(currentNewsItem.getAuthor());
 
         //return the whole list view
-        return listItemView;
+        return convertView;
     }
 
 }
